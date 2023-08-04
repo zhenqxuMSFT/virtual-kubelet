@@ -43,11 +43,9 @@ const (
 	virtualKubeletLastNodeAppliedObjectMeta = "virtual-kubelet.io/last-applied-object-meta"
 )
 
-var (
-	// ErrConflictingLeaseControllerConfiguration is returned when the lease controller related options have been
-	// specified multiple times
-	ErrConflictingLeaseControllerConfiguration = pkgerrors.New("Multiple, conflicting lease configurations have been put into place")
-)
+// ErrConflictingLeaseControllerConfiguration is returned when the lease controller related options have been
+// specified multiple times
+var ErrConflictingLeaseControllerConfiguration = pkgerrors.New("Multiple, conflicting lease configurations have been put into place")
 
 // NodeProvider is the interface used for registering a node and updating its
 // status in Kubernetes.
@@ -240,7 +238,7 @@ type NodeController struct { //nolint:revive
 // The default intervals used for lease and status updates.
 const (
 	DefaultPingInterval         = 10 * time.Second
-	DefaultStatusUpdateInterval = 1 * time.Minute
+	DefaultStatusUpdateInterval = 30 * time.Second
 )
 
 // Run registers the node in kubernetes and starts loops for updating the node
@@ -590,7 +588,6 @@ func updateNodeStatus(ctx context.Context, nodes v1.NodeInterface, nodeFromProvi
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
